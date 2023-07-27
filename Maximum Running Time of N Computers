@@ -1,0 +1,46 @@
+// Maximum Running Time of N Computers
+// Use binary search : if with the current time , all computers can run  then mark that as answer and move further otherwise move backwards
+// 2 4 4 5 7   and n=4
+// Lets consider for time 5
+// 5 and 7 can completely run 2 computers for 5 minutes whole
+// rest 2 4 and 4 -> sum is 10 and 10/2=5  ( we divided by 2 because 2 computers will be cancelled due to 5 and 7)
+
+class Solution {
+public:
+    bool isPossible(vector<int>& batteries, long long mid,int n)
+    {
+        long long batteriesTotal=0;
+        for(int i=0;i<batteries.size();i++)
+        {
+            if(batteries[i]>=mid)
+                batteriesTotal+=mid;   // if current value is greater than 5 add 5 to it
+            else
+                batteriesTotal+=batteries[i];
+        }
+        if(batteriesTotal/n>=mid)
+            return true;
+        return false;
+    }
+    long long maxRunTime(int n, vector<int>& batteries) {
+        long long low=0,high=0;
+        int m=batteries.size();
+        for(int i=0;i<m;i++)
+        {
+            high+=batteries[i];
+        }
+        long long ans=0;
+        while(low<=high)
+        {
+            long long mid= low+(high-low)/2;
+            if(isPossible(batteries,mid,n))
+            {
+                ans=mid;
+                low=mid+1;
+            }
+            else{
+                high=mid-1;
+            }
+        }
+        return ans;
+    }
+};
