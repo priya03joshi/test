@@ -1,0 +1,36 @@
+class Solution {
+public:
+    void solve(string &update,int index,string digits,vector<string> letters,vector<string> &ans)
+    {
+        if(index==digits.size())
+        {
+            ans.push_back(update);
+            return;
+        }
+        // digits contain string so convert it into number to pick out index
+        int number=digits[index]-'0';
+        // find the string present in the index in letters vector
+        // if digit is 2 currentString will be "abc"
+        string currentString=letters[number];
+        for(int i=0;i<currentString.size();i++)
+        {
+            // eg:when i=0 1st call- update=a  
+            // 2nd call-when i=0 update=ad
+            // 2nd call-when i=1 update=ae
+            // 2nd call-when i=1 update=af
+            update+=currentString[i];                 
+            solve(update,index+1,digits,letters,ans);
+            update.erase(update.size()-1);             
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        vector<string> ans;
+        if(digits.size()==0)
+            return ans;
+        // vector to store letters at each index eg: 2-abc, 3-def etc.
+        vector<string> letters={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        string update="";
+        solve(update,0,digits,letters,ans);
+        return ans;
+    }
+};
