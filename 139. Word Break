@@ -1,0 +1,59 @@
+//Input: s = "leetcode", wordDict = ["leet","code"]
+//Output: true
+//Explanation: Return true because "leetcode" can be segmented as "leet code".
+
+class Solution {
+public:
+    // this functions loop through s and and checks one by one if each string is present in our set or not
+    // if present it calls check function again with next index
+    // 01234567
+    // leetcode
+    // eg: in leetcode  leet is found in our set then check is call again with i=4 
+    // if the word is traversed totally and words are found in our set then return true
+    bool check(int i,string s,set<string> words,vector<int> &dp)
+    {
+        if(i==s.size())
+            return true;
+        if(dp[i]!=-1)
+        {
+            if(dp[i]==1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        string temp="";
+        bool ans=false;
+        for(int k=i;k<s.size();k++)
+        {
+            temp+=s[k];
+            if(words.find(temp)!=words.end())
+            {
+                ans=check(k+1,s,words,dp);
+                if(ans==true)
+                {
+                    dp[i]=1;
+                    return true;
+                }
+            }
+        }
+        // if ans is true that means s was traversed and words are found successfully
+        ans==true?dp[i]=1:dp[i]=0;
+        return ans;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        vector<int> dp(s.size(),-1);
+        set<string> words;
+        //insert wordDict in a set
+        for(int i=0;i<wordDict.size();i++)
+        {
+            words.insert(wordDict[i]);
+        }
+        bool canBreak=check(0,s,words,dp);
+        return canBreak;
+    }
+    
+};
